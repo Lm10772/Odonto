@@ -45,7 +45,7 @@ function atualizarTabela() {
     const consultas = JSON.parse(localStorage.getItem('consultas')) || [];
     let totalComissoes = 0;
 
-    consultas.forEach(consulta => {
+    consultas.forEach((consulta, index) => {
         const row = document.createElement('tr');
         row.innerHTML = `
             <td>${consulta.data}</td>
@@ -53,12 +53,20 @@ function atualizarTabela() {
             <td>${consulta.procedimento}</td>
             <td>${consulta.valor}</td>
             <td>${consulta.comissao}</td>
+            <td><button class="delete-btn" onclick="excluirConsulta(${index})">Excluir</button></td>
         `;
         tbody.appendChild(row);
         totalComissoes += parseFloat(consulta.comissao);
     });
 
     totalComissoesSpan.textContent = totalComissoes.toFixed(2);
+}
+
+function excluirConsulta(index) {
+    let consultas = JSON.parse(localStorage.getItem('consultas')) || [];
+    consultas.splice(index, 1); // Remove o registro no índice especificado
+    localStorage.setItem('consultas', JSON.stringify(consultas)); // Atualiza o localStorage
+    atualizarTabela(); // Atualiza a tabela na tela
 }
 
 // Carregar as consultas ao iniciar
